@@ -1,0 +1,34 @@
+version: "3.1"
+services:
+  react-app:
+    image: note-app-frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    networks:
+      - note-mern-app
+  api-server:
+    image: note-app-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    external_links:
+      - mongo
+    networks:
+      - note-mern-app
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - note-mern-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  note-mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local

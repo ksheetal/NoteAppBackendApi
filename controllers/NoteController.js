@@ -8,6 +8,10 @@ router.get("/getAllNotes", (req, res, next) => {
   noteService.getAllNotes(req, res);
 });
 
+router.get("/addFakeNote", (req, res, next) => {
+  console.log("inside add fake note");
+  noteService.addFakeNote(req, res);
+});
 router.post("/AddNote", (req, res, next) => {
   noteService.addNote(req, res);
 });

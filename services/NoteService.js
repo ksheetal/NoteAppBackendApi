@@ -2,7 +2,7 @@ const Note = require("../model/noteModel");
 const mongoose = require("mongoose");
 
 function addNote(req, res) {
-  if (req.body.noteTitle != undefined || req.body.noteTitle != undefined) {
+  if (req.body.noteTitle != undefined || req.body.noteDesc != undefined) {
     const note = new Note({
       _id: new mongoose.Types.ObjectId(),
       noteTitle: req.body.noteTitle,
@@ -28,6 +28,26 @@ function addNote(req, res) {
   }
 }
 
+function addFakeNote(req, res) {
+  const note = new Note({
+    _id: new mongoose.Types.ObjectId(),
+    noteTitle: "fake note title",
+    noteDesc: "fake note desc",
+  });
+  note
+    .save()
+    .then((result) => {
+      return res.status(200).json({
+        message: "Note Added Successfully",
+        createdNote: result,
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: err,
+      });
+    });
+}
 function getNoteById(req, res) {
   Note.findById(req.params.noteId)
     .exec()
@@ -82,4 +102,5 @@ module.exports = {
   getAllNotes,
   deleteNote,
   updateNote,
+  addFakeNote,
 };

@@ -1,25 +1,34 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const noteRoute = require("./controllers/NoteController");
 require("dotenv").config();
 
-const MONGO_HOST = process.env.MONGO_HOST;
-const MONGO_PORT = process.env.MONGO_PORT;
+const MONGO_HOST = "mongo";
+const MONGO_PORT = "27017";
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect(
-  "mongodb://" + MONGO_HOST + ":" + MONGO_PORT + "/noteAppBackend",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect("mongodb://mongo:27017/noteAppBackend", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// app.use(cors);
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 // Handing all incoming requrest for Note
 app.use("/note", noteRoute);
